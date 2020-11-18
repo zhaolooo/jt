@@ -1,0 +1,39 @@
+server:
+  port: 8093
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    #引入druid数据源
+    #type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/jtdb?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    username: root
+    password: root
+
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+#mybatis-plush配置
+mybatis-plus:
+  type-aliases-package: com.jt.pojo
+  mapper-locations: classpath:/mybatis/mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level: 
+    com.jt.mapper: debug
+
+#关于Dubbo配置
+dubbo:
+  scan:
+    basePackages: com.jt    #指定dubbo的包路径 扫描dubbo注解
+  application:              #应用名称
+    name: provider-user     #一个接口对应一个服务名称   一个接口可以有多个实现
+  registry:  #注册中心 用户获取数据从机中获取 主机只负责监控整个集群 实现数据同步
+    address: zookeeper://192.168.126.129:2181?backup=192.168.126.129:2182,192.168.126.129:2183
+  protocol:  #指定协议
+    name: dubbo  #使用dubbo协议(tcp-ip)  web-controller直接调用sso-Service
+    port: 20880  #每一个服务都有自己特定的端口 不能重复.
